@@ -1,0 +1,12 @@
+checkout:
+    back_to_shop: "Back to Shop"
+    title: "Checkout"
+    your_items: "Your Items"
+    basket_empty: "Your basket is empty."
+    order_summary: "Order Summary"
+    total: "Total"
+    delivery_address: "Delivery Address"
+    change_address: "Change Address"
+    payment_method: "Payment Method"
+    confirm_free_order: "Confirm Free Order"
+    complete_order: "Complete Order"

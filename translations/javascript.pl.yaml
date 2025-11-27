@@ -1,0 +1,12 @@
+checkout:
+    back_to_shop: "Wróć do sklepu"
+    title: "Kasa"
+    your_items: "Twoje przedmioty"
+    basket_empty: "Twój koszyk jest pusty."
+    order_summary: "Podsumowanie zamówienia"
+    total: "Suma"
+    delivery_address: "Adres dostawy"
+    change_address: "Zmień adres"
+    payment_method: "Metoda płatności"
+    confirm_free_order: "Potwierdź darmowe zamówienie"
+    complete_order: "Zakończ zamówienie"
