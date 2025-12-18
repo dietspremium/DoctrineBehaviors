@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  validator:
+    build: ./validator
+    ports:
+      - "3344:3344"
+    volumes:
+      - ./validator:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  # Optional: PHP service if you want to run the command inside docker
+  # php:
+  #   image: php:8.1-cli
+  #   volumes:
+  #     - .:/app
+  #   working_dir: /app
+  #   command: tail -f /dev/null
+  #   environment:
+  #     - VALIDATOR_URL=http://validator:3344/validate
