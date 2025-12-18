@@ -2,27 +2,40 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { Validator } = require('schemarama');
-// Note: schemarama documentation is sparse, but based on the repo it uses Validator class
-// If direct import fails, we might need to adjust based on how it exports.
-// However, since we can't run it here, we will code defensively or assume standard export.
+const SHACLValidator = require('rdf-validate-shacl');
+const N3 = require('n3');
+const jsonld = require('jsonld');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = 3344;
 
 app.use(bodyParser.json());
 
-// Basic SHACL shapes for common types (Article, Recipe)
-// Since schemarama validates against shapes, we need to provide them or use built-in ones.
-// The npm package might bundle some, but usually you provide a shapes graph.
-// For now, we will assume a basic validation or try to load a default bundle if available.
-// If schemarama requires external shape files, we would fetch them.
+// Load Shapes
+const shapesPath = path.join(__dirname, 'shapes.ttl');
+const shapesContent = fs.readFileSync(shapesPath, 'utf8');
 
-// To make this robust without external deps, let's define a minimal validation logic
-// that uses schemarama's underlying validators if accessible, or falls back to basic structure.
-// NOTE: "schemarama" npm package is very old (0.0.4).
-// If it doesn't work out of the box, we might need to implement a SHACL validator using 'rdf-validate-shacl' directly.
-// Given the user wants "schemarama", we try to use it.
+const parser = new N3.Parser();
+const shapesDataset = new N3.Store();
+
+// Initialize Validator
+let validator;
+
+parser.parse(shapesContent, (error, quad, prefixes) => {
+    if (error) {
+        console.error("Error parsing SHACL shapes:", error);
+        process.exit(1);
+    }
+    if (quad) {
+        shapesDataset.add(quad);
+    } else {
+        // Parsing complete
+        validator = new SHACLValidator(shapesDataset, { factory: N3.DataFactory });
+        console.log("SHACL Validator initialized with custom shapes.");
+    }
+});
 
 app.post('/validate', async (req, res) => {
     const { url } = req.body;
@@ -61,39 +74,49 @@ app.post('/validate', async (req, res) => {
             return res.json({ status: 'FAILED', reason: 'No JSON-LD found', url });
         }
 
-        // 3. Validate
-        // Since we can't easily load full Schema.org SHACL shapes (they are huge) without mounting them,
-        // and schemarama 0.0.4 is experimental, we will try to use it if it has a simple API.
-        // If not, we will perform a check that simulates what it does: checking constraints.
-
-        // For this implementation, strictly following the user's request to use the "schemarama" tool/concept:
-        // We will mock the "Success" if we found valid JSON-LD structure,
-        // as fully implementing a SHACL validator with all Schema.org shapes in a lightweight script is risky without testing.
-        // BUT, I will add a placeholder for where the Schemarama validation call goes.
-
+        // 3. Convert JSON-LD to RDF (N-Quads) and Validate
         const report = {
             valid: 0,
             errors: []
         };
 
         for (const block of jsonLdBlocks) {
-            // Check basic structure
-            if (!block['@context'] || !block['@type']) {
-                report.errors.push(`Block missing @context or @type`);
-                continue;
-            }
+            try {
+                // Expand JSON-LD to ensure @type is resolved to full IRIs (http://schema.org/Article)
+                // We mock the context to schema.org if it's simple string,
+                // but jsonld.toRDF handles standard contexts well.
 
-            // Stronger validation logic (Placeholder for full SHACL)
-            // Here we would ideally run: schemarama.validate(block, shapes)
+                const nquads = await jsonld.toRDF(block, { format: 'application/n-quads' });
 
-            // Checking for required fields for specific types (Manual implementation of "Shapes")
-            const type = Array.isArray(block['@type']) ? block['@type'][0] : block['@type'];
-            const errors = validateType(type, block);
+                // Parse N-Quads into a Store
+                const dataStore = new N3.Store();
+                const dataParser = new N3.Parser();
 
-            if (errors.length > 0) {
-                 report.errors.push(...errors.map(e => `${type}: ${e}`));
-            } else {
-                report.valid++;
+                await new Promise((resolve, reject) => {
+                    dataParser.parse(nquads, (err, quad, prefixes) => {
+                        if (err) reject(err);
+                        if (quad) dataStore.add(quad);
+                        else resolve();
+                    });
+                });
+
+                // Validate
+                const validationReport = validator.validate(dataStore);
+
+                if (validationReport.conforms) {
+                    report.valid++;
+                } else {
+                    // Extract helpful error messages
+                    validationReport.results.forEach(result => {
+                         let msg = result.message ? result.message.map(m => m.value).join(' ') : 'Constraint Violation';
+                         let path = result.path ? result.path.value : 'unknown path';
+                         let focusNode = result.focusNode ? result.focusNode.value : 'unknown node';
+                         report.errors.push(`Violation at ${focusNode} (Path: ${path}): ${msg}`);
+                    });
+                }
+
+            } catch (e) {
+                report.errors.push(`Error processing block: ${e.message}`);
             }
         }
 
@@ -102,13 +125,13 @@ app.post('/validate', async (req, res) => {
                 status: 'FAILED',
                 reason: 'Validation errors found',
                 errors: report.errors,
-                data: jsonLdBlocks
+                data: jsonLdBlocks // Return data for debugging
             });
         }
 
         return res.json({
             status: 'OK',
-            message: `Found ${report.valid} valid blocks`,
+            message: `Found ${report.valid} valid blocks that conform to strict SHACL shapes.`,
             data: jsonLdBlocks
         });
 
@@ -117,34 +140,6 @@ app.post('/validate', async (req, res) => {
         return res.status(500).json({ status: 'FAILED', reason: `Internal Error: ${err.message}` });
     }
 });
-
-function validateType(type, data) {
-    const errors = [];
-    // Define some required fields for common types (Simulating Google Rich Results strictness)
-    const constraints = {
-        'Article': ['headline', 'image', 'datePublished', 'author'],
-        'Recipe': ['name', 'image', 'author', 'recipeIngredient', 'recipeInstructions'],
-        'Product': ['name', 'image', 'description', 'offers'],
-        'BreadcrumbList': ['itemListElement'],
-        'FAQPage': ['mainEntity'],
-        'VideoObject': ['name', 'description', 'thumbnailUrl', 'uploadDate']
-    };
-
-    if (constraints[type]) {
-        constraints[type].forEach(field => {
-            if (!data[field]) {
-                errors.push(`Missing required property: "${field}"`);
-            }
-        });
-    }
-
-    // recursive check for author
-    if (data.author) {
-        // checks on author if needed
-    }
-
-    return errors;
-}
 
 app.listen(PORT, () => {
     console.log(`Validator service running on port ${PORT}`);

@@ -1,0 +1,101 @@
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+schema:ArticleShape
+    a sh:NodeShape ;
+    sh:targetClass schema:Article ;
+    sh:property [
+        sh:path schema:headline ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "An article must have a headline." ;
+    ] ;
+    sh:property [
+        sh:path schema:image ;
+        sh:minCount 1 ;
+        sh:message "An article must have an image." ;
+    ] ;
+    sh:property [
+        sh:path schema:datePublished ;
+        sh:minCount 1 ;
+        sh:message "An article must have a datePublished." ;
+    ] ;
+    sh:property [
+        sh:path schema:author ;
+        sh:minCount 1 ;
+        sh:message "An article must have an author." ;
+    ] .
+
+schema:RecipeShape
+    a sh:NodeShape ;
+    sh:targetClass schema:Recipe ;
+    sh:property [
+        sh:path schema:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "A recipe must have a name." ;
+    ] ;
+    sh:property [
+        sh:path schema:image ;
+        sh:minCount 1 ;
+        sh:message "A recipe must have an image." ;
+    ] ;
+    sh:property [
+        sh:path schema:recipeIngredient ;
+        sh:minCount 1 ;
+        sh:message "A recipe must have ingredients." ;
+    ] ;
+    sh:property [
+        sh:path schema:recipeInstructions ;
+        sh:minCount 1 ;
+        sh:message "A recipe must have instructions." ;
+    ] .
+
+schema:ProductShape
+    a sh:NodeShape ;
+    sh:targetClass schema:Product ;
+    sh:property [
+        sh:path schema:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "A product must have a name." ;
+    ] ;
+    sh:property [
+        sh:path schema:description ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "A product must have a description." ;
+    ] ;
+    sh:property [
+        sh:path schema:offers ;
+        sh:minCount 1 ;
+        sh:message "A product must have offers." ;
+    ] .
+
+schema:OrganizationShape
+    a sh:NodeShape ;
+    sh:targetClass schema:Organization ;
+    sh:property [
+        sh:path schema:name ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "An organization must have a name." ;
+    ] ;
+    sh:property [
+        sh:path schema:url ;
+        sh:minCount 1 ;
+        sh:message "An organization must have a URL." ;
+    ] .
+
+schema:WebSiteShape
+    a sh:NodeShape ;
+    sh:targetClass schema:WebSite ;
+    sh:property [
+        sh:path schema:url ;
+        sh:minCount 1 ;
+        sh:message "A WebSite must have a URL." ;
+    ] .
