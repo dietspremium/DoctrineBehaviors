@@ -1,12 +1,14 @@
-FROM python:3.9-slim
+FROM node:18-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY package.json .
+# Install dependencies
+# Note: jsonld version in schemarama 0.0.4 might be old, we try standard install first
+RUN npm install
 
-COPY app.py .
+COPY . .
 
 EXPOSE 3344
 
-CMD ["python", "app.py"]
+CMD ["npm", "start"]

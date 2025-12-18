@@ -1,5 +1,0 @@
-flask
-extruct
-requests
-jsonschema
-lxml
