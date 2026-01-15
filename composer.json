@@ -54,7 +54,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Knp\\DoctrineBehaviors\\Tests\\": "tests"
+            "Knp\\DoctrineBehaviors\\Tests\\": "tests",
+            "App\\": "tests/Fixtures/App"
         }
     },
     "scripts": {

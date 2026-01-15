@@ -1,0 +1,26 @@
+name_en,name_de,name_pl,brand,company,dosage_strength_en,form_en,active,country
+Ibuprofen 200mg,Ibuprofen 200mg,Ibuprofen 200mg,Advil,Pfizer,200mg,Tablet,1,USA
+Paracetamol 500mg,Paracetamol 500mg,Paracetamol 500mg,Tylenol,Johnson & Johnson,500mg,Tablet,1,USA
+Aspirin 81mg,Aspirin 81mg,Aspirin 81mg,Bayer Aspirin,Bayer,81mg,Tablet,1,Germany
+Amoxicillin 500mg,Amoxicillin 500mg,Amoxicillin 500mg,Amoxil,GlaxoSmithKline,500mg,Capsule,1,UK
+Lisinopril 10mg,Lisinopril 10mg,Lisinopril 10mg,Prinivil,Merck,10mg,Tablet,1,USA
+Atorvastatin 20mg,Atorvastatin 20mg,Atorvastatin 20mg,Lipitor,Pfizer,20mg,Tablet,1,USA
+Metformin 500mg,Metformin 500mg,Metformin 500mg,Glucophage,Bristol-Myers Squibb,500mg,Tablet,1,France
+Simvastatin 40mg,Simvastatin 40mg,Simvastatin 40mg,Zocor,Merck,40mg,Tablet,1,UK
+Omeprazole 20mg,Omeprazole 20mg,Omeprazole 20mg,Prilosec,AstraZeneca,20mg,Capsule,1,Sweden
+Levothyroxine 50mcg,Levothyroxine 50mcg,Levothyroxine 50mcg,Synthroid,AbbVie,50mcg,Tablet,1,USA
+Amlodipine 5mg,Amlodipine 5mg,Amlodipine 5mg,Norvasc,Pfizer,5mg,Tablet,1,USA
+Metoprolol 25mg,Metoprolol 25mg,Metoprolol 25mg,Lopressor,Novartis,25mg,Tablet,1,Switzerland
+Losartan 50mg,Losartan 50mg,Losartan 50mg,Cozaar,Merck,50mg,Tablet,1,USA
+Azithromycin 250mg,Azithromycin 250mg,Azithromycin 250mg,Zithromax,Pfizer,250mg,Tablet,1,USA
+Gabapentin 300mg,Gabapentin 300mg,Gabapentin 300mg,Neurontin,Pfizer,300mg,Capsule,1,USA
+Hydrochlorothiazide 12.5mg,Hydrochlorothiazide 12.5mg,Hydrochlorothiazide 12.5mg,Microzide,Teva,12.5mg,Capsule,1,Israel
+Sertraline 50mg,Sertraline 50mg,Sertraline 50mg,Zoloft,Pfizer,50mg,Tablet,1,USA
+Furosemide 40mg,Furosemide 40mg,Furosemide 40mg,Lasix,Sanofi,40mg,Tablet,1,France
+Pantoprazole 40mg,Pantoprazole 40mg,Pantoprazole 40mg,Protonix,Wyeth,40mg,Tablet,1,USA
+Prednisone 10mg,Prednisone 10mg,Prednisone 10mg,Deltasone,Pharmacia,10mg,Tablet,1,USA
+Cetirizine 10mg,Cetirizine 10mg,Cetirizine 10mg,Zyrtec,Johnson & Johnson,10mg,Tablet,1,Belgium
+Loratadine 10mg,Loratadine 10mg,Loratadine 10mg,Claritin,Bayer,10mg,Tablet,1,Germany
+Fluticasone 50mcg,Fluticasone 50mcg,Fluticasone 50mcg,Flonase,GlaxoSmithKline,50mcg,Spray,1,UK
+Albuterol 90mcg,Albuterol 90mcg,Albuterol 90mcg,Ventolin,GlaxoSmithKline,90mcg,Inhaler,1,UK
+Tramadol 50mg,Tramadol 50mg,Tramadol 50mg,Ultram,Janssen,50mg,Tablet,1,Belgium
